@@ -34,7 +34,7 @@ def handler(work_generator, sock, addr):
       fname = data[0:data.find('\n')].split()[1]
       data = data[data.find('\n')+1:]
 
-      log = file(fname, 'w')
+      log = open(fname, 'w')
       amount = len(data)
       log.write(data)
       log.close()
