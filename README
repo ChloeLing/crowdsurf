@@ -1,0 +1,3 @@
+
+Crowdsurf is a TCP client/server app written specifically to automatically surf
+the Alexa top 500 using Amazon's EC2.
