@@ -19,10 +19,14 @@ class Browser(multiprocessing.Process):
     self.command = command
 
   def run(self):
-      self._start_xpra()
-      (fout, ferr) = self._surf()
+    from twisted.internet import defer
+    self._start_xpra()
+    try:
+      return defer.succeed(self._surf())
+    except Exception as e:
+      return defer.fail(e)
+    finally:
       self._stop_xpra()
-      return (fout, ferr)
 
   def _start_xpra(self):
     port = self._xpra_port()
@@ -31,7 +35,7 @@ class Browser(multiprocessing.Process):
     subprocess.call('xpra start %d'%port,
         stdout=fnull, stderr=fnull, shell=True)
     os.environ['DISPLAY'] = ':%d'%port
-    time.sleep(1)
+    time.sleep(.1)
 
   def _stop_xpra(self):
     port = self._xpra_port()
@@ -55,9 +59,10 @@ class Browser(multiprocessing.Process):
     domain  = self.command['domain']
 
     bp = subprocess.Popen([browser, domain], stdout=outlog, stderr=errlog)
-    time.sleep(int(self.command['browsetime']))
+    time.sleep(float(self.command['browsetime']))
     bp.terminate()
+    bp.wait()
     outlog.close()
     errlog.close()
 
-    return (outlog.filename, errlog.filename)
+    return (bp.returncode, (outlog.filename, errlog.filename))
