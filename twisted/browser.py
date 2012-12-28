@@ -1,9 +1,9 @@
 from StringIO import StringIO
 import gzip
 import os, sys, time
-import multiprocessing, subprocess
+import threading, subprocess
 
-class Browser(multiprocessing.Process):
+class Browser(threading.Thread):
   """Run a browser instance in a separate process"""
 
   def __init__(self, command):
@@ -21,12 +21,8 @@ class Browser(multiprocessing.Process):
   def run(self):
     from twisted.internet import defer
     self._start_xpra()
-    try:
-      return defer.succeed(self._surf())
-    except Exception as e:
-      return defer.fail(e)
-    finally:
-      self._stop_xpra()
+    self.results = self._surf()
+    self._stop_xpra()
 
   def _start_xpra(self):
     port = self._xpra_port()
@@ -66,3 +62,16 @@ class Browser(multiprocessing.Process):
     errlog.close()
 
     return (bp.returncode, (outlog.filename, errlog.filename))
+if __name__ == '__main__':
+  command = {'domain': 'google.com',
+             'exec': 'browsers/crowdflow/bin/QtTestBrowser',
+             'worknumber': '0',
+             'iter': '1',
+             'browsetime': '5',
+             'rank': '1',
+             'browser': 'crowdflow'}    
+  bs = Browser(command)
+  print 'bs.start', bs.start(), dir(bs)
+  print 'bs.join', bs.join()
+  print 'bs.results', bs.results
+
