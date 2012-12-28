@@ -32,7 +32,7 @@ class Browser(multiprocessing.Process):
     port = self._xpra_port()
     self._stop_xpra()
     fnull = open(os.devnull, 'w')
-    subprocess.call('xpra start %d'%port,
+    subprocess.call('xpra start :%d'%port,
         stdout=fnull, stderr=fnull, shell=True)
     os.environ['DISPLAY'] = ':%d'%port
     time.sleep(.1)
@@ -40,7 +40,7 @@ class Browser(multiprocessing.Process):
   def _stop_xpra(self):
     port = self._xpra_port()
     fnull = open(os.devnull, 'w')
-    subprocess.call('xpra stop %d'%port,
+    subprocess.call('xpra stop :%d'%port,
         stdout=fnull, stderr=fnull, shell=True)
     os.environ.pop('DISPLAY', '')
 
