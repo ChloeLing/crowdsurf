@@ -1,3 +1,25 @@
 
 Crowdsurf is a TCP client/server app written specifically to automatically surf
 the Alexa top 500 using Amazon's EC2.
+
+Put any browsers in the browsers/ directory
+For example:
+  browsers/condom/
+  browsers/condom/bin
+  browsers/condom/bin/QtTestBrowser
+  browsers/condom/lib
+  browsers/condom/lib/libQtWebKit.so.4
+  browsers/condom/lib/libQtWebKit.so
+  browsers/condom/lib/libQtWebKit.so.4.10.0
+  browsers/condom/lib/plugins
+  browsers/condom/lib/plugins/libTestNetscapePlugIn.so.1
+  browsers/condom/lib/plugins/libTestNetscapePlugIn.so
+  browsers/condom/lib/plugins/libTestNetscapePlugIn.so.1.0.0
+  browsers/condom/lib/plugins/libTestNetscapePlugIn.so.1.0
+  browsers/condom/lib/pkgconfig
+  browsers/condom/lib/pkgconfig/QtWebKit.pc
+  browsers/condom/lib/libQtWebKit.prl
+  browsers/condom/lib/libQtWebKit.so.4.10
+
+Run a daemonized server on each work node.
+The client will ask each server for surf results
