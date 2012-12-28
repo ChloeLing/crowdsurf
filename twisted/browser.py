@@ -44,13 +44,13 @@ class Browser(threading.Thread):
     return int(self.command['worknumber']) + 1000
 
   def _logNames(self):
-    outlog = '/tmp/%(browser)s-%(rank)s-%(domain)s.out.gz'%self.command
-    errlog = '/tmp/%(browser)s-%(rank)s-%(domain)s.err.gz'%self.command
+    outlog = '/tmp/%(browser)s-%(rank)s-%(domain)s.out'%self.command
+    errlog = '/tmp/%(browser)s-%(rank)s-%(domain)s.err'%self.command
     return (outlog, errlog)
 
   def _surf(self):
-    outlog = gzip.open(self._logNames()[0], 'wb')
-    errlog = gzip.open(self._logNames()[1], 'wb')
+    outlog = open(self._logNames()[0], 'wb')
+    errlog = open(self._logNames()[1], 'wb')
     browser = self.command['exec']
     domain  = self.command['domain']
 
@@ -61,7 +61,9 @@ class Browser(threading.Thread):
     outlog.close()
     errlog.close()
 
-    return (bp.returncode, (outlog.filename, errlog.filename))
+    return (bp.returncode, self._logNames())
+
+
 if __name__ == '__main__':
   command = {'domain': 'google.com',
              'exec': 'browsers/crowdflow/bin/QtTestBrowser',
